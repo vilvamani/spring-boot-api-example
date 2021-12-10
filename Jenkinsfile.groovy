@@ -17,6 +17,9 @@
                         
             
             echo "------- ${JOB_NAME}"
+                        sh 'printenv'
+                        
+                        echo "--------"
 
                         // Cloning the Git Repo
                         checkout scm
