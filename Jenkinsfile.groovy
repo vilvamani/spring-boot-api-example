@@ -5,9 +5,7 @@
 
         environment {
             dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
-            def jenkins = Jenkins.getInstance()
-            def jobName = "${JOB_NAME}"
-            def job = jenkins.getItem(jobName)
+            def jobs = Hudson.instance.getAllItems(hudson.model.Job.class)
             
             JOB_NAME = "${JOB_NAME}".toLowerCase()
         }
