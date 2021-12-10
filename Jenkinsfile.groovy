@@ -5,8 +5,11 @@
 
         environment {
             dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
+            def jenkins = Jenkins.getInstance()
+            def jobName = "${JOB_NAME}"
+            def job = jenkins.getItem(jobName)
+            
             JOB_NAME = "${JOB_NAME}".toLowerCase()
-            test = job.getClass().simpleName
         }
 
         stages {
@@ -15,7 +18,7 @@
                     script{
                         cleanWs()
                         
-                        echo "======= ${test}"
+                        println "Job type: ${job.getClass()}"
                         
                         
             
