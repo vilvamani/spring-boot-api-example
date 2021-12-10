@@ -1,0 +1,13 @@
+# Note: This is a clone of the default 'docker-compose.yml' with slight differences for the CI agent
+version: '3'
+services:
+  test-api:
+    container_name: test
+    image: porter/elasticsearch
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8085:8080"
+    volumes:
+      - $PWD:/app
