@@ -1,19 +1,34 @@
-pipeline {
-    agent any
+    pipeline {
+        agent {
+            label "parts-ecommerces-devl"
+        }
 
-    triggers {
-        pollSCM '* * * * *'
-    }
-    stages {
-        stage('Build') {
-            steps {
-                sh './gradlew assemble'
+        environment {
+            dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
+            JOB_NAME = "${JOB_NAME}".toLowerCase()
+        }
+
+        stages {
+            stage("Git Checkout") {
+                steps {
+                    script{
+                        cleanWs()
+
+                        // Cloning the Git Repo
+                        checkout scm
+
+                        // Reading first 8 characters from the GIT Commit ID
+                        GIT_COMMIT_REV = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                    }
+                }
+            }
+
+            stage("Build & Run Unit Tests") {
+                steps {
+                    script {
+                        sh "docker-compose -f docker-compose-ci.yml run test-api clean test --info"
+                    }
+                }
             }
         }
-        stage('Test') {
-            steps {
-                sh './gradlew test'
-            }
-        }
     }
-}
