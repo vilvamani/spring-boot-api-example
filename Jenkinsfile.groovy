@@ -5,7 +5,7 @@
 
         environment {
             dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
-            def jobs = Hudson.instance.getAllItems(hudson.model.Job.class)
+            //def jobs = Hudson.instance.getAllItems(hudson.model.Job.class)
             
             JOB_NAME = "${JOB_NAME}".toLowerCase()
         }
@@ -16,7 +16,7 @@
                     script{
                         cleanWs()
                         
-                        println "Job type: ${job.getClass()}"
+                        println "Job type: ${JOB_TYPE}"
                         
                         
             
