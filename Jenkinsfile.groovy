@@ -6,8 +6,6 @@
         environment {
             dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
             JOB_NAME = "${JOB_NAME}".toLowerCase()
-            
-            echo "------- ${JOB_NAME}"
         }
 
         stages {
@@ -15,6 +13,10 @@
                 steps {
                     script{
                         cleanWs()
+                        
+                        
+            
+            echo "------- ${JOB_NAME}"
 
                         // Cloning the Git Repo
                         checkout scm
