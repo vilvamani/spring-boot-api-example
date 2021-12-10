@@ -14,6 +14,8 @@
                     script{
                         cleanWs()
                         
+                        echo "======= job.getClass().simpleName"
+                        
                         
             
             echo "------- ${JOB_NAME}"
