@@ -6,6 +6,7 @@
         environment {
             dockerImageName = "${aws_account}.dkr.ecr.${aws_region}.amazonaws.com/test-api"
             JOB_NAME = "${JOB_NAME}".toLowerCase()
+            test = job.getClass().simpleName
         }
 
         stages {
@@ -14,7 +15,7 @@
                     script{
                         cleanWs()
                         
-                        echo "======= job.getClass().simpleName"
+                        echo "======= ${test}"
                         
                         
             
