@@ -1,0 +1,97 @@
+---
+# Source: rabbitmq/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-mq-sandbox
+  labels:
+    app.kubernetes.io/name: sandbox
+    app.kubernetes.io/instance: rabbit-mq
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      targetPort: 5672
+      protocol: TCP
+      name: amqp
+    - port: 15672
+      targetPort: 15672
+      protocol: TCP
+      name: http
+    - port: 15692
+      targetPort: 15692
+      protocol: TCP
+      name: prometheus
+  selector:
+    app.kubernetes.io/name: sandbox
+    app.kubernetes.io/instance: rabbit-mq
+---
+# Source: rabbitmq/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-mq-sandbox
+  labels:
+    app.kubernetes.io/name: sandbox
+    app.kubernetes.io/instance: rabbit-mq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sandbox
+      app.kubernetes.io/instance: rabbit-mq
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sandbox
+        app.kubernetes.io/instance: rabbit-mq
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: rabbitmq
+          securityContext:
+            {}
+          image: rabbitmq:3.8.22-management
+          imagePullPolicy: Always
+          ports:
+            - name: amqp
+              containerPort: 5672
+              protocol: TCP
+            - name: http
+              containerPort: 15672
+              protocol: TCP
+            - name: prometheus
+              containerPort: 15692
+              protocol: TCP
+---
+# Source: rabbitmq/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbit-mq-sandbox
+  labels:
+    app.kubernetes.io/name: sandbox
+    app.kubernetes.io/instance: rabbit-mq
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:809731660233:certificate/2e5459a1-e582-4be2-b9ab-f1359e1811ff
+    alb.ingress.kubernetes.io/group.name: ecommerce-sandbox
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-2016-08
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+spec:
+  rules:
+    - host: "chart-example.local"
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rabbit-mq-sandbox
+                port:
+                  number: 15672
