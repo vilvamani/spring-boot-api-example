@@ -1,3 +1,6 @@
+println "${env}"
+println "--- ${env. GIT_BRANCH}"
+
 pipeline {
     agent any
 
