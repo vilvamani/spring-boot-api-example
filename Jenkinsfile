@@ -3,6 +3,11 @@ println "--- ${scm.branches[0].name}"
 
 pipeline {
     agent any
+    
+    
+  options {
+    skipDefaultCheckout(true)
+  }
 
     triggers {
         pollSCM '* * * * *'
