@@ -1,5 +1,5 @@
 println "${env}"
-println "--- ${env. BRANCH_NAME}"
+println "--- ${env.BRANCH_NAME}"
 
 pipeline {
     agent any
