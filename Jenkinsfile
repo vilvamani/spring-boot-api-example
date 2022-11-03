@@ -1,5 +1,5 @@
 println "${env}"
-println "*** 6666--- ${scm.branches[0].name}"
+println "7777 *** 6666--- ${scm.branches[0].name}"
 
 pipeline {
     agent any
